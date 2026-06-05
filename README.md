@@ -71,7 +71,130 @@ KIT includes a self-locking security system:
 - **KITNOCOMMIT Folder** — Personal lockbox (`~/.claude/KITNOCOMMIT/`) for API keys, client configs, and login details. Gitignored and agent-locked.
 - **Self-Lock** — The guard hook protects itself from modification by any agent.
 
-## Quick Install
+## Prerequisites — Full Setup Guide
+
+Before installing KIT, you need Claude Code and its dependencies on your machine.
+
+### Step 1: Node.js (required)
+
+Claude Code runs on Node.js. Install the LTS version.
+
+**Windows:**
+```powershell
+# Option A: Download installer from https://nodejs.org (recommended)
+# Option B: Using winget
+winget install OpenJS.NodeJS.LTS
+```
+
+**macOS:**
+```bash
+# Option A: Download installer from https://nodejs.org
+# Option B: Using Homebrew
+brew install node
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+Verify: `node --version` (should be v18+ or v20+)
+
+### Step 2: Git (required)
+
+Needed to clone this repo and for Claude Code's git integration.
+
+**Windows:**
+```powershell
+winget install Git.Git
+```
+
+**macOS:**
+```bash
+# Git comes with Xcode Command Line Tools
+xcode-select --install
+# Or via Homebrew
+brew install git
+```
+
+**Linux:**
+```bash
+sudo apt-get install git
+```
+
+Verify: `git --version`
+
+### Step 3: jq (required for hooks)
+
+KIT's security hooks use `jq` to parse JSON tool inputs.
+
+**Windows:**
+```powershell
+winget install jqlang.jq
+```
+
+**macOS:**
+```bash
+brew install jq
+```
+
+**Linux:**
+```bash
+sudo apt-get install jq
+```
+
+Verify: `jq --version`
+
+### Step 4: Claude Code (required)
+
+Install Claude Code CLI globally via npm:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Verify: `claude --version`
+
+**Other install options:**
+- **Desktop app (Mac/Windows):** Download from https://claude.com/claude-code
+- **VS Code extension:** Search "Claude Code" in VS Code marketplace
+- **JetBrains plugin:** Search "Claude Code" in JetBrains marketplace
+
+### Step 5: Anthropic API Key (required)
+
+You need an Anthropic API key to use Claude Code.
+
+1. Go to https://console.anthropic.com
+2. Create an account or sign in
+3. Go to **API Keys** and create a new key
+4. Set the key in your environment:
+
+**Windows (PowerShell):**
+```powershell
+[System.Environment]::SetEnvironmentVariable("ANTHROPIC_API_KEY", "sk-ant-your-key-here", "User")
+```
+
+**macOS/Linux (add to ~/.bashrc or ~/.zshrc):**
+```bash
+export ANTHROPIC_API_KEY="sk-ant-your-key-here"
+```
+
+Or let Claude Code prompt you on first run — it will ask for the key and store it securely.
+
+### Step 6: First Run (verify everything works)
+
+```bash
+claude
+```
+
+This should launch Claude Code. Type `/help` to confirm it's working, then `/exit` to quit.
+
+---
+
+## Install KIT
+
+### Quick Install
 
 ```bash
 git clone https://github.com/smarmen86/claude-code-kit.git
@@ -81,7 +204,7 @@ bash install.sh
 
 The install script copies agents, skills, and bin scripts into your `~/.claude/` directory. It will **not** overwrite your existing `settings.json` or `CLAUDE.md` — it merges or skips.
 
-## Manual Install
+### Manual Install
 
 Copy what you need:
 
@@ -99,6 +222,16 @@ cp -r bin/ ~/.claude/bin/
 cp CLAUDE.md ~/.claude/CLAUDE.md
 ```
 
+### Post-Install: Create Your Personal Lockbox
+
+```bash
+mkdir -p ~/.claude/KITNOCOMMIT
+```
+
+Put your API keys, client configs, and personal files in `KITNOCOMMIT/`. It's gitignored and agent-locked — no agent can read or access it.
+
+---
+
 ## How It Works
 
 1. User gives Claude Code a task
@@ -108,11 +241,23 @@ cp CLAUDE.md ~/.claude/CLAUDE.md
 5. Hooks log all activity to `~/.claude/logs/`
 6. Env guard blocks access to secrets at every layer
 
-## Requirements
+## Dependency Summary
 
-- [Claude Code](https://claude.com/claude-code) CLI or Desktop app
-- Anthropic API key configured
-- Node.js (for MCP servers)
+| Dependency | Min Version | Required For | Install Check |
+|-----------|-------------|-------------|---------------|
+| Node.js | v18+ | Claude Code runtime | `node --version` |
+| npm | v9+ | Installing Claude Code | `npm --version` |
+| Git | v2+ | Cloning KIT, git integration | `git --version` |
+| jq | v1.6+ | Security hooks (env guard) | `jq --version` |
+| Claude Code | latest | The AI agent platform | `claude --version` |
+| Anthropic API key | — | Authentication | Set in env or on first run |
+
+**Optional:**
+| Dependency | Required For | Install |
+|-----------|-------------|---------|
+| Python 3 | Some skills and data agents | `python --version` |
+| Playwright | Browser automation (`/browse`) | `npx @anthropic-ai/mcp-server-playwright` |
+| GitHub CLI (`gh`) | PR creation, repo management | `winget install GitHub.cli` / `brew install gh` |
 
 ## License
 
