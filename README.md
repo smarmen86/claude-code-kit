@@ -194,7 +194,15 @@ This should launch Claude Code. Type `/help` to confirm it's working, then `/exi
 
 ## Install KIT
 
-### Quick Install
+### Quick Install — Windows (PowerShell)
+
+```powershell
+git clone https://github.com/smarmen86/claude-code-kit.git
+cd claude-code-kit
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+### Quick Install — macOS / Linux / Git Bash
 
 ```bash
 git clone https://github.com/smarmen86/claude-code-kit.git
@@ -206,19 +214,26 @@ The install script copies agents, skills, and bin scripts into your `~/.claude/`
 
 ### Manual Install
 
-Copy what you need:
-
-```bash
+**Windows (PowerShell):**
+```powershell
 # All agents (from Anthropic)
-cp -r agents/ ~/.claude/agents/
+Copy-Item -Recurse agents\* $env:USERPROFILE\.claude\agents\ -Force
 
 # All skills (from gstack)
-cp -r skills/ ~/.claude/skills/
+Copy-Item -Recurse skills $env:USERPROFILE\.claude\skills -Force
 
 # Utility scripts (Klugman IT)
-cp -r bin/ ~/.claude/bin/
+Copy-Item -Recurse bin\* $env:USERPROFILE\.claude\bin\ -Force
 
 # Agent routing (review before copying — may overwrite your own CLAUDE.md)
+Copy-Item CLAUDE.md $env:USERPROFILE\.claude\CLAUDE.md
+```
+
+**macOS / Linux / Git Bash:**
+```bash
+cp -r agents/ ~/.claude/agents/
+cp -r skills/ ~/.claude/skills/
+cp -r bin/ ~/.claude/bin/
 cp CLAUDE.md ~/.claude/CLAUDE.md
 ```
 
