@@ -33,6 +33,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "bash ~/.claude/bin/env-guard.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
             "command": "bash ~/.claude/bin/agent-logger.sh PreToolUse",
             "timeout": 5,
             "async": true

@@ -3,6 +3,9 @@
 # Protects credentials, sessions, and personal data
 # ============================================
 
+# --- KITNOCOMMIT (personal/private lockbox) ---
+KITNOCOMMIT/
+
 # --- Credentials & Secrets ---
 .credentials.json
 *.key

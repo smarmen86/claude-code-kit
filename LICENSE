@@ -2,6 +2,22 @@ MIT License
 
 Copyright (c) 2025-2026 Klugman IT (klugmans.com)
 
+This license applies to Klugman IT's original contributions:
+  - CLAUDE.md (agent routing and orchestration logic)
+  - bin/ scripts (logging, chat export, project guard, env security hook)
+  - install.sh (installer)
+  - settings.json (hooks, MCP, permissions configuration)
+  - KITNOCOMMIT security concept
+  - Overall packaging and curation
+
+This license does NOT apply to:
+  - agents/ — Based on Claude Code agent definitions by Anthropic
+  - skills/ — gstack engineering toolkit by Garry Tan
+
+Refer to those projects for their respective licensing terms.
+
+---
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
