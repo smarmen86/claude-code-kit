@@ -194,17 +194,31 @@ This should launch Claude Code. Type `/help` to confirm it's working, then `/exi
 
 ## Install KIT
 
-### Quick Install — Windows (PowerShell)
+### One-Line Install — Windows (PowerShell)
+
+Open PowerShell and paste this single command:
 
 ```powershell
-git clone https://github.com/smarmen86/claude-code-kit.git
-cd claude-code-kit
-powershell -ExecutionPolicy Bypass -File install.ps1
+Set-Location $env:USERPROFILE; if (Test-Path claude-code-kit) { Remove-Item -Recurse -Force claude-code-kit }; git clone https://github.com/smarmen86/claude-code-kit.git; Set-Location claude-code-kit; powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-### Quick Install — macOS / Linux / Git Bash
+Or step by step:
+```powershell
+cd $env:USERPROFILE
+git clone https://github.com/smarmen86/claude-code-kit.git
+cd claude-code-kit
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+### One-Line Install — macOS / Linux / Git Bash
 
 ```bash
+cd ~ && rm -rf claude-code-kit && git clone https://github.com/smarmen86/claude-code-kit.git && cd claude-code-kit && bash install.sh
+```
+
+Or step by step:
+```bash
+cd ~
 git clone https://github.com/smarmen86/claude-code-kit.git
 cd claude-code-kit
 bash install.sh
