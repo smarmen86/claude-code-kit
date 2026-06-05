@@ -1,0 +1,50 @@
+# ============================================
+# Klugman IT Agent Kit — .gitignore
+# Protects credentials, sessions, and personal data
+# ============================================
+
+# --- Credentials & Secrets ---
+.credentials.json
+*.key
+*.pem
+*.env
+.env*
+
+# --- Personal / Local Settings ---
+settings.local.json
+
+# --- Session & History Data ---
+history.jsonl
+sessions/
+session-env/
+shell-snapshots/
+
+# --- Logs & Telemetry ---
+logs/
+telemetry/
+
+# --- Cache & Temp ---
+cache/
+paste-cache/
+backups/
+file-history/
+
+# --- IDE State ---
+ide/
+
+# --- Plans & Tasks (ephemeral) ---
+plans/
+tasks/
+
+# --- Per-project Memory (contains client PII) ---
+projects/
+
+# --- Plugins (installed locally) ---
+plugins/
+
+# --- OS junk ---
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+*~

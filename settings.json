@@ -1,0 +1,132 @@
+{
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  },
+  "theme": "dark-daltonized",
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Agent",
+      "NotebookEdit",
+      "WebFetch",
+      "WebSearch",
+      "mcp__*"
+    ]
+  },
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@anthropic-ai/mcp-server-playwright"
+      ]
+    }
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/bin/agent-logger.sh PreToolUse",
+            "timeout": 5,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/bin/agent-logger.sh PostToolUse",
+            "timeout": 5,
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.claude/skills/seo/hooks/validate-schema.py \"$FILE_PATH\"",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/bin/agent-logger.sh PostToolUseFailure",
+            "timeout": 5,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/bin/agent-logger.sh SessionStart",
+            "timeout": 5,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/bin/agent-logger.sh Stop",
+            "timeout": 5,
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/bin/chat-to-html.sh --hook",
+            "timeout": 30,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/bin/agent-logger.sh UserPromptSubmit",
+            "timeout": 5,
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/bin/project-guard.sh",
+            "timeout": 5,
+            "statusMessage": "Checking project context..."
+          }
+        ]
+      }
+    ]
+  }
+}
