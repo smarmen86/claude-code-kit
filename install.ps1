@@ -1,5 +1,5 @@
 # ============================================
-# Claude Code Agent Kit (KIT) — Windows Installer
+# Claude Code Agent Kit (KIT) - Windows Installer
 # Klugman IT | klugmans.com
 # ============================================
 $ErrorActionPreference = "Stop"
@@ -8,8 +8,8 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Target = Join-Path $env:USERPROFILE ".claude"
 
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  Claude Code Agent Kit (KIT) — Installer"   -ForegroundColor Cyan
-Write-Host "  Klugman IT | klugmans.com"                  -ForegroundColor Cyan
+Write-Host "  Claude Code Agent Kit (KIT) - Installer"  -ForegroundColor Cyan
+Write-Host "  Klugman IT | klugmans.com"                 -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -50,7 +50,7 @@ if (Test-Path $BinSrc) {
 # --- CLAUDE.md ---
 $ClaudeMd = Join-Path $Target "CLAUDE.md"
 if (Test-Path $ClaudeMd) {
-    Write-Host "[4/5] CLAUDE.md already exists — skipping (won't overwrite your config)." -ForegroundColor Gray
+    Write-Host "[4/5] CLAUDE.md already exists - skipping (will not overwrite your config)." -ForegroundColor Gray
     Write-Host "      To use KIT's routing, manually copy:" -ForegroundColor Gray
     Write-Host "      Copy-Item '$ScriptDir\CLAUDE.md' '$ClaudeMd'" -ForegroundColor Gray
 } else {
@@ -62,7 +62,7 @@ if (Test-Path $ClaudeMd) {
 # --- settings.json ---
 $SettingsJson = Join-Path $Target "settings.json"
 if (Test-Path $SettingsJson) {
-    Write-Host "[5/5] settings.json already exists — skipping (won't overwrite your config)." -ForegroundColor Gray
+    Write-Host "[5/5] settings.json already exists - skipping (will not overwrite your config)." -ForegroundColor Gray
     Write-Host "      Review $ScriptDir\settings.json for hooks and MCP config to merge manually." -ForegroundColor Gray
 } else {
     Write-Host "[5/5] Installing settings.json (hooks, MCPs, permissions)..." -ForegroundColor Yellow
@@ -72,6 +72,6 @@ if (Test-Path $SettingsJson) {
 
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  KIT installed to $Target"                    -ForegroundColor Cyan
+Write-Host "  KIT installed to $Target"                   -ForegroundColor Cyan
 Write-Host "  276 agents ready. Start Claude Code and go." -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
