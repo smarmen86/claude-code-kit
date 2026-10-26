@@ -1,0 +1,11 @@
+# Normalize all text to LF in the repo and working tree. This keeps the generated
+# builds byte-identical across platforms so the CI drift check is stable, and keeps
+# shell shebangs (install.sh) valid when cloned on Windows.
+* text=auto eol=lf
+
+# Explicitly binary (none today, but future-proof).
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.pdf binary
