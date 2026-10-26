@@ -141,7 +141,9 @@ echo "Done. Start 'codex' and ask it to spawn a specialist subagent."
 }
 
 function installPs1(counts) {
-  return `# Codex CLI installer (Windows) — Klugman IT KIT
+  // ASCII-only: Windows PowerShell reads a no-BOM UTF-8 .ps1 as ANSI and mangles
+  // non-ASCII characters (e.g. an em-dash), which breaks script parsing.
+  return `# Codex CLI installer (Windows) - Klugman IT KIT
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RepoRoot  = Resolve-Path (Join-Path $ScriptDir "..\\..")
@@ -165,7 +167,7 @@ else { Copy-Item (Join-Path $ScriptDir "AGENTS.md") $AgentsMd -Force }
 Write-Host "[4/4] config.toml..." -ForegroundColor Yellow
 $Cfg = Join-Path $Target "config.toml"
 if (-not (Test-Path $Cfg)) { Copy-Item (Join-Path $ScriptDir "config.toml") $Cfg -Force }
-else { Write-Host "      exists — merge config.toml by hand." -ForegroundColor Gray }
+else { Write-Host "      exists - merge config.toml by hand." -ForegroundColor Gray }
 
 Write-Host "Done." -ForegroundColor Cyan
 `;
@@ -229,7 +231,15 @@ export function buildCodex(model, outDir) {
   write(join(outDir, "AGENTS.md"), agentsMd(model));
   write(join(outDir, "config.toml"), configToml());
   write(join(outDir, "install.sh"), installSh(model.counts));
-  write(join(outDir, "install.ps1"), installPs1(model.counts));
+  const ps1 = installPs1(model.counts);
+  const nonAscii = ps1.match(/[^\x00-\x7F]/);
+  if (nonAscii) {
+    throw new Error(
+      `install.ps1 contains non-ASCII char U+${nonAscii[0].codePointAt(0).toString(16)} ` +
+      `— Windows PowerShell mangles no-BOM UTF-8. Keep the PowerShell installer ASCII-only.`
+    );
+  }
+  write(join(outDir, "install.ps1"), ps1);
   write(join(outDir, "README.md"), readme(model));
   return { agentFiles: files.length };
 }
