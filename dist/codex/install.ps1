@@ -1,4 +1,4 @@
-# Codex CLI installer (Windows) — Klugman IT KIT
+# Codex CLI installer (Windows) - Klugman IT KIT
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $RepoRoot  = Resolve-Path (Join-Path $ScriptDir "..\..")
@@ -22,6 +22,6 @@ else { Copy-Item (Join-Path $ScriptDir "AGENTS.md") $AgentsMd -Force }
 Write-Host "[4/4] config.toml..." -ForegroundColor Yellow
 $Cfg = Join-Path $Target "config.toml"
 if (-not (Test-Path $Cfg)) { Copy-Item (Join-Path $ScriptDir "config.toml") $Cfg -Force }
-else { Write-Host "      exists — merge config.toml by hand." -ForegroundColor Gray }
+else { Write-Host "      exists - merge config.toml by hand." -ForegroundColor Gray }
 
 Write-Host "Done." -ForegroundColor Cyan
