@@ -1,0 +1,19 @@
+{
+  "name": "claude-code-kit",
+  "version": "1.1.0",
+  "description": "276 specialist agents + 114 skills for Claude Code — and portable builds for OpenAI Codex CLI and ChatGPT. Packaged by Klugman IT.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build.mjs all",
+    "build:codex": "node tools/build.mjs codex",
+    "build:chatgpt": "node tools/build.mjs chatgpt",
+    "build:manifest": "node tools/build.mjs manifest",
+    "validate": "node tools/validate.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/smarmen86/claude-code-kit"
+}

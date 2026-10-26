@@ -45,6 +45,9 @@ projects/
 # --- Plugins (installed locally) ---
 plugins/
 
+# --- Node (build system is zero-dependency, but just in case) ---
+node_modules/
+
 # --- OS junk ---
 Thumbs.db
 Desktop.ini

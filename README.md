@@ -1,6 +1,10 @@
 # Claude Code Agent Kit (KIT)
 
-**276 specialist agents + 115 skills + hooks + logging** — a curated, pre-configured multi-agent setup for Claude Code.
+**276 specialist agents + 114 skills + hooks + logging** — a curated, pre-configured multi-agent setup for Claude Code.
+
+**Now portable:** the same 276 personas also install into **[OpenAI Codex CLI](dist/codex/)** and build into a **[ChatGPT Custom GPT](dist/chatgpt/)** — one source of truth, three platforms. See [Multi-Platform](#multi-platform-claude-code--codex--chatgpt).
+
+📇 Browse every agent in the **[CATALOG](CATALOG.md)** (auto-generated).
 
 Packaged and configured by [Klugman IT](https://klugmans.com) | 347-722-1555
 
@@ -13,14 +17,16 @@ This kit bundles and configures components from multiple sources:
 | Component | Source | Credit |
 |-----------|--------|--------|
 | `agents/` (276) | Based on [Claude Code](https://claude.com/claude-code) agent type definitions | [Anthropic](https://anthropic.com) |
-| `skills/` (115) | [gstack](https://github.com/garrytan) engineering toolkit | [Garry Tan](https://github.com/garrytan) |
+| `skills/` (114) | [gstack](https://github.com/garrytan) engineering toolkit | [Garry Tan](https://github.com/garrytan) |
 | `CLAUDE.md` | Agent routing index and orchestration logic | Klugman IT |
 | `bin/` | Logging, chat export, project guard, env security hook | Klugman IT |
 | `settings.json` | Hooks, MCPs, permissions configuration | Klugman IT |
+| `tools/` | Multi-platform build system (Codex + ChatGPT generators) | Klugman IT |
+| `dist/` | Generated Codex CLI + ChatGPT builds | Klugman IT |
 | `install.sh` | One-command installer | Klugman IT |
 | Security hooks | Self-locking env guard, KITNOCOMMIT lockbox | Klugman IT |
 
-**Klugman IT's contribution:** The packaging, routing logic (`CLAUDE.md`), security hardening (env guard hook, KITNOCOMMIT personal lockbox), logging infrastructure, install system, and the curation of 276 agents into a working multi-agent setup with proper orchestration.
+**Klugman IT's contribution:** The packaging, routing logic (`CLAUDE.md`), security hardening (env guard hook, KITNOCOMMIT personal lockbox), logging infrastructure, install system, the **multi-platform build system** that ports the whole kit to Codex CLI and ChatGPT from one source of truth, and the curation of 276 agents into a working multi-agent setup with proper orchestration.
 
 **We did not create the underlying agents or gstack skills.** We assembled, configured, and secured them into a ready-to-use kit.
 
@@ -31,10 +37,15 @@ This kit bundles and configures components from multiple sources:
 | Component | Count | Description |
 |-----------|-------|-------------|
 | `agents/` | 276 | Specialist agent definitions (`.md` files) — from Anthropic |
-| `skills/` | 115 | Slash-command skills — from gstack |
+| `skills/` | 114 | Slash-command skills — from gstack |
 | `bin/` | 5 | Utility scripts (logging, chat export, project guard, env security) |
 | `CLAUDE.md` | 1 | Agent routing index + orchestration instructions |
 | `settings.json` | 1 | Hooks, MCPs, permissions config |
+| `tools/` | — | Build system: generates the Codex + ChatGPT ports |
+| `dist/codex/` | — | OpenAI Codex CLI build (276 subagents + skills) |
+| `dist/chatgpt/` | — | ChatGPT build (router GPT + knowledge packs + SDK router) |
+| `CATALOG.md` | 1 | Auto-generated catalog of all agents by category |
+| `manifest.json` | 1 | Machine-readable index (source of truth for counts) |
 
 ## Agent Categories
 
@@ -269,6 +280,57 @@ Put your API keys, client configs, and personal files in `KITNOCOMMIT/`. It's gi
 4. For multi-domain tasks, `agents-orchestrator` coordinates multiple agents in parallel
 5. Hooks log all activity to `~/.claude/logs/`
 6. Env guard blocks access to secrets at every layer
+
+---
+
+## Multi-Platform (Claude Code · Codex · ChatGPT)
+
+The 276 agents under `agents/` are the **single source of truth**. A small, zero-dependency
+Node build system (`tools/`) generates faithful ports for two other platforms into `dist/`.
+Edit an agent once; rebuild; every platform updates.
+
+```bash
+node tools/build.mjs        # build everything (Codex + ChatGPT + manifest/catalog)
+node tools/build.mjs codex  # just the Codex build
+node tools/validate.mjs     # integrity check (counts, frontmatter, skills)
+```
+
+### 🟣 Claude Code (the source)
+Install as above — `install.sh` / `install.ps1` copy `agents/`, `skills/`, `bin/`, `CLAUDE.md`,
+and `settings.json` into `~/.claude/`.
+
+### 🟢 OpenAI Codex CLI
+A faithful structural port — Codex got native subagents (GA 2026) and adopted the same
+`SKILL.md` spec, so almost everything maps 1:1:
+
+| Claude Code | → | Codex CLI |
+|---|---|---|
+| `agents/*.md` | → | `agents/*.toml` native subagents |
+| `CLAUDE.md` | → | `AGENTS.md` |
+| `settings.json` (JSON) | → | `config.toml` (TOML, snake_case `[mcp_servers.*]`) |
+| `skills/` | → | `skills/` (copied 1:1) |
+
+```bash
+node tools/build.mjs codex          # generate dist/codex/
+bash dist/codex/install.sh          # → ~/.codex/   (install.ps1 on Windows)
+```
+Opus-tier agents map to `model_reasoning_effort = "high"`, Sonnet-tier to `"medium"`.
+Details: [`dist/codex/README.md`](dist/codex/README.md).
+
+### 🔵 ChatGPT
+Two surfaces, because ChatGPT has no bulk GPT import:
+
+- **Custom GPT (no-code)** — one **router GPT** whose knowledge files hold all 276 personas,
+  consolidated into **20 packs** (within the 20-file cap) with `## PERSONA:` blocks tuned for
+  retrieval. Instructions stay under the 8,000-char limit. Paste `instructions.md` + upload
+  `knowledge/*.md`. Steps: [`dist/chatgpt/custom-gpt/README.md`](dist/chatgpt/custom-gpt/README.md).
+- **Agents SDK / Responses API (programmatic)** — `personas.json` + a `router.py` that picks the
+  right persona and runs it on the Responses API (the Assistants API sunsets 2026-08-26).
+  Details: [`dist/chatgpt/agents-sdk/README.md`](dist/chatgpt/agents-sdk/README.md).
+
+```bash
+node tools/build.mjs chatgpt        # generate dist/chatgpt/
+```
 
 ## Dependency Summary
 

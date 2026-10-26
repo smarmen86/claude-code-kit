@@ -1,0 +1,30 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate kit integrity (counts, frontmatter, skills)
+        run: node tools/validate.mjs
+
+      - name: Regenerate all builds
+        run: node tools/build.mjs all
+
+      - name: Fail if generated builds are out of date
+        run: |
+          if ! git diff --quiet; then
+            echo "::error::Generated files are stale. Run 'node tools/build.mjs all' and commit the result."
+            git --no-pager diff --stat
+            exit 1
+          fi
+          echo "Generated builds are in sync."

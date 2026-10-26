@@ -1,0 +1,12 @@
+# Codex CLI config — Klugman IT KIT
+# Copy to ~/.codex/config.toml (or merge into your existing one).
+# NOTE: MCP servers use snake_case [mcp_servers.*] in Codex (not Claude's camelCase).
+
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+model_reasoning_effort = "medium"
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["@playwright/mcp@latest"]
+startup_timeout_sec = 20
